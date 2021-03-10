@@ -1,0 +1,61 @@
+<!doctype html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+
+        <title>IntelliBasic Demo - Customer 2</title>
+
+        <!--<meta http-equiv="x-ua-compatible" content="IE=9">-->
+        <link href="https://cdn-na.infragistics.com/igniteui/2020.2/latest/css/themes/infragistics/infragistics.theme.css" rel="stylesheet" />
+        <link href="https://cdn-na.infragistics.com/igniteui/2020.2/latest/css/structure/infragistics.css" rel="stylesheet" />
+
+        <script src="https://ajax.aspnetcdn.com/ajax/modernizr/modernizr-2.8.3.js"></script>
+        <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+        <!-- Ignite UI for jQuery Required Combined JavaScript Files -->
+        <script src="https://cdn-na.infragistics.com/igniteui/2020.2/latest/js/infragistics.core.js"></script>
+        <script src="https://cdn-na.infragistics.com/igniteui/2020.2/latest/js/infragistics.lob.js"></script>
+        <script src="https://cdn-na.infragistics.com/igniteui/2020.2/latest/js/infragistics.scheduler-bundled.js"></script>
+    </head>
+
+    <body>
+        <h1>Customer 2</h1>
+        <div id="scheduler"></div>
+        <script>
+            $(function () {
+                $.ajax({
+                    url: "https://intellitestfunction.azurewebsites.net/api/HttpTrigger1",
+                    type: "GET",
+                    dataType: "json",
+                    success: function(res) {
+                        console.log("Response: ", res);
+
+                        var id = 1;
+                        var appointments = [];
+                        for (var i = 0; i < res.length; i++)
+                        {
+                            var appointment = {};
+                            appointment.id = id;
+                            appointment.start = new Date(res[i]["StartDateTime"]);
+                            appointment.end = new Date(res[i]["FinishDateTime"]);
+                            appointment.subject = res[i]["Description"];
+
+                            id++;
+                            appointments.push(appointment);
+                        }
+
+                        $("#scheduler").igScheduler({
+                            height: "650px",
+                            width: "100%",
+                            selectedDate: new Date("2020-11-30"),
+                            views: ["monthView", "agendaView"],
+                            dataSource: appointments
+                        });
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>
